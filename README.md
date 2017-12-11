@@ -23,7 +23,7 @@ Install [virtualenv](https://virtualenv.pypa.io/en/stable/installation/).
 
 Create a new virtualenv called `my_env`: `virtualenv -p python3 my_env`.
 
-Activate virtualenv : `my_env/source bin/activate`.
+Activate virtualenv : `source my_env/bin/activate`.
 
 Install packages : `pip install -r req.txt`.
 
