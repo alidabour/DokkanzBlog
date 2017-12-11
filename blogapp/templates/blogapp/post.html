@@ -1,0 +1,58 @@
+{% extends "blogapp/base.html" %}
+
+{% block content %}
+<div class="post" id="post_id">
+	<div class="post-heading">
+		<div class="post-title" id="post_subject">
+			{{post.subject}}
+		</div>
+	</div>
+	<div class="post-content" id="post_content">
+		{{post.content}}
+	</div>
+	{% if user.is_authenticated %}
+	{% if user == post.owner %}
+	<a href="{%url 'blogapp:edit_post' post.id%}">Edit</a>
+	<a href="{%url 'blogapp:delete_post' post.id%}">Delete</a>
+	{%endif%}
+	{%endif%}
+</div>
+{%if comments%}
+<h2>Comments</h2>
+{%endif%}
+{%for comment in comments%}
+<div class="comment-title" style="font-size: 20px; font-weight: bold;">
+	{{comment.owner.username}}
+</div>
+<div class="comment-content" >
+	{{comment.content}}
+</div>
+{%endfor%}
+{% if user.is_authenticated %}
+<form action="{% url 'blogapp:comment' post.id %}" method="post">
+	{% csrf_token %}
+	{{form}}
+	<input type="submit" value="Comment" />
+</form>
+{% endif %}
+{% endblock %}
+{% block script %}
+<script>
+	var socket = new WebSocket('ws://' + window.location.host + '/blog_detail/'+{{post.id }}+'/');
+
+	socket.onmessage = function message(event) {
+		var data = JSON.parse(event.data);
+		if(data['subject'].length==0){
+			$('#content').html("<h1>Sorry, Not available</h1>")
+		}else{
+			$('#post_subject').html(data['subject']);
+			$('#post_content').html(data['content']);
+		}
+	};
+
+	if (socket.readyState == WebSocket.OPEN) {
+		socket.onopen();
+	}
+</script>
+{% endblock script %}
+

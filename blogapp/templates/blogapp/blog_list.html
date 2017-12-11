@@ -1,0 +1,55 @@
+{% extends "blogapp/base.html" %}
+{% block content %}
+
+{% for post in posts%}
+<div class="post">
+  <div class="post-heading">
+    <div class="post-title">
+    <a href="{% url 'blogapp:blog_detail' post.id %}">{{post.subject}}</a>
+    </div>
+
+  </div>
+
+  <div class="post-content">
+  {{post.content}}
+  </div>
+</div>
+{% endfor %}
+{% endblock %}
+
+{% block script %}
+  <script>
+    var socket = new WebSocket('ws://' + window.location.host + '/blog_list/');
+
+    socket.onopen = function open() {
+      console.log('WebSockets connection created.');
+
+    };
+
+    socket.onmessage = function message(event) {
+      var data = JSON.parse(event.data);
+      console.log('WebSockets onmessage');
+      console.log(data)
+      var post_id = data['post_id'];
+      post_id = post_id.toString();
+      console.log(post_id);
+      $('#content').prepend(`<div class="post">
+      <div class="post-newheading">
+      <div class="post-title">
+      <a href="/blog/`+post_id+`">`+data['subject']+`</a>
+      </div>
+      </div>
+      <div class="post-content">`
+      +data['content']+
+      `</div>
+      </div>`);
+    
+      
+    };
+
+    if (socket.readyState == WebSocket.OPEN) {
+      socket.onopen();
+    }
+  </script>
+
+{% endblock script %}

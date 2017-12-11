@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet"  type="text/css" href="{% static '/blogapp/style.css' %}" />
+
+  <title>Dokkanz Blog</title>
+</head>
+
+<body>
+  <a href="/blog" class="main-title">
+   Dokkanz Blog
+  </a>
+
+  <div class="login-area">
+    {% if user.is_authenticated %}
+      <a href="{% url 'blogapp:new_post' %}">NEW POST</a> |
+      {{user.username}} 
+      (<a class="login-link" href="{% url 'blogapp:logout' %}">logout</a>
+      )
+    {% else %}
+      <a class="login-link" href="{% url 'blogapp:logout'%}">login</a>
+      |
+      <a class="login-link" href="{% url 'blogapp:sign_up' %}">signup</a>
+    {% endif %}
+  </div>
+
+  <div id="content">
+  {% block content %}
+  {% endblock %}
+  </div>
+    <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+  {% block script %}{% endblock script %}
+</body>
+
+</html>
+
