@@ -15,6 +15,10 @@ Django Task for Dokkanz.
         Login in user can add,edit,delete posts and add comments
         Only the owner of Post can edit/delete it.
     MySql Database
+## Youtube Demo
+
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/ub2QNlQdsrs/0.jpg)](https://www.youtube.com/watch?v=ub2QNlQdsrs)
+
 ## Guide
 
 Install [Python3.6](https://askubuntu.com/a/865569).
